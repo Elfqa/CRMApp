@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
+import { deleteContact } from "../api/api";
 
 const statusMapping = {
     0: 'Scheduled',
     1: 'Completed'
 };
 
-const getBackgroundColor = (status) => {
+const getBackgroundColorByContactStatus = (status) => {
     switch (status) {
         case 1:
-            return '#a4d59c';  // Completed
+            return '#aca081';  // Completed
         case 0:
             return 'bisque'; // Scheduled
         default:
@@ -27,32 +28,48 @@ const Contact = ({
                      status,
                      advisorId,
                      clientId,
+                     setContacts,
+                     setError,
+                     setSuccess
                  }) => {
-    const contactCardStyle = {
-        border: '1px solid black',
-        padding: '10px',
-        borderRadius: '5px',
-        textAlign: 'left',
-        backgroundColor: getBackgroundColor(status)
+    const rowStyle = {
+        backgroundColor: getBackgroundColorByContactStatus(status)
+    };
+
+    const handleDelete = async () => {
+        setError(''); // Clear previous error
+        setSuccess(''); // Clear previous success message
+        try {
+            await deleteContact(id);
+            setContacts(prev => prev.filter(contact => contact.id !== id));
+            setSuccess(`Successfully deleted contact with ID: ${id}`);
+        } catch (error) {
+            setError('Failed to delete contact. Please try again.');
+        }
     };
 
     return (
-        <div className="contact-card" style={contactCardStyle}>
-            <h2>Contact ID: {id}</h2>
-            <p><strong>Advisor ID:</strong> {advisorId} <strong>Client ID:</strong> {clientId}</p>
-            <p><strong>Description:</strong> {description}</p>
-            <p><strong>Status:</strong> {statusMapping[status]}</p>
-            {status === 0 && (
-                <p><strong>Scheduled Date:</strong> {scheduledDate ? new Date(scheduledDate).toLocaleString() : 'N/A'}</p>
-            )}
-            {status === 1 && (
-                <>
-                    <p><strong>Start Date:</strong> {startDate ? new Date(startDate).toLocaleString() : 'N/A'} <strong>End Date:</strong> {endDate ? new Date(endDate).toLocaleString() : 'N/A'}</p>
-                </>
-            )}
-            <p><strong>Creation Date:</strong> {new Date(creationDate).toLocaleString()}</p>
-            <p><strong>Last Update:</strong> {new Date(lastUpdate).toLocaleString()}</p>
-        </div>
+        <tr style={rowStyle}>
+            <td>{id}</td>
+            <td>{advisorId}</td>
+            <td>{clientId}</td>
+            <td>{description}</td>
+            <td>{statusMapping[status]}</td>
+            <td>
+                {status === 0 ? (
+                    scheduledDate ? new Date(scheduledDate).toLocaleString() : 'N/A'
+                ) : (
+                    <>
+                        {startDate ? new Date(startDate).toLocaleString() : 'N/A'} - {endDate ? new Date(endDate).toLocaleString() : 'N/A'}
+                    </>
+                )}
+            </td>
+            <td>{new Date(creationDate).toLocaleString()}</td>
+            <td>{new Date(lastUpdate).toLocaleString()}</td>
+            <td>
+                <button onClick={handleDelete}>Delete</button>
+            </td>
+        </tr>
     );
 };
 
@@ -67,6 +84,9 @@ Contact.propTypes = {
     status: PropTypes.number.isRequired,
     advisorId: PropTypes.number.isRequired,
     clientId: PropTypes.number.isRequired,
+    setContacts: PropTypes.func.isRequired,
+    setError: PropTypes.func.isRequired,
+    setSuccess: PropTypes.func.isRequired,
 };
 
 export default Contact;

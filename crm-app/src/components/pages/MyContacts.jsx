@@ -10,7 +10,7 @@ const MyContacts = () => {
         <div>
             <h2>Search Contacts</h2>
             <SearchContacts setList={setContacts} />
-            <ContactsList contacts={contacts} />
+            <ContactsList contacts={contacts} setContacts={setContacts} />
         </div>
     );
 };

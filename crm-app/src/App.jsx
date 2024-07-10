@@ -11,12 +11,15 @@ function App() {
         <>
             <BrowserRouter>
                 <Header />
-                <Routes>
-                    <Route path='/' element={<HomePage />} />
-                    <Route path='my-contacts' element={<MyContacts />} />
-                    <Route path='my-clients' element={<MyClients />} />
-                    <Route path='schedule-a-contact' element={<AddScheduledContactPage />} />
-                </Routes>
+                <div className="page">
+                    <Routes>
+                        <Route path='/' element={<HomePage />} />
+                        <Route path='my-contacts' element={<MyContacts />} />
+                        <Route path='my-clients' element={<MyClients />} />
+                        <Route path='schedule-a-contact' element={<AddScheduledContactPage />} />
+                    </Routes>
+                </div>
+
             </BrowserRouter>
         </>
     )

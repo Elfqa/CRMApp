@@ -2,24 +2,15 @@ const url = 'https://localhost:7153'; //nasz url ktory mamy w swaggerze w apce b
 
 /// /api/SearchContacts
 
-
-// export const getContactsByAdvisorId = (advisorId, setList) => {
-//     fetch(`${url}/api/Contacts/AdvisorId?id=${advisorId}`)
-//         .then(res => res.json())
-//         .then(res => setList(res))
-//         .catch(err => console.log(err));
-// }
 export const getContactsByAdvisorId = async (advisorId, setList) => {
-    //try {
+    try {
         const response = await fetch(`${url}/api/Contacts/AdvisorId?id=${advisorId}`);
         const data = await response.json();
         setList(data);
-    // } catch (error) {
-    //     console.log(error);
-    // }
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-
 
 export const addScheduledContact = async (formData) => {
     console.log(formData);
@@ -35,19 +26,11 @@ export const addScheduledContact = async (formData) => {
     return { status: response.status, id: result };
 };
 
-
-
-
-// export async function getContacts(url) {
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         return data;
-//     } catch (error) {
-//         console.error('Failed to fetch contacts:', error);
-//         return [];
-//     }
-// }
+export const deleteContact = async (id) => {
+    const response = await fetch(`${url}/api/Contacts/${id}`, {
+        method: "DELETE",
+    });
+    if (!response.ok) {
+        throw new Error('Failed to delete contact');
+    }
+};
