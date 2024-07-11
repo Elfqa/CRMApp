@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { updateScheduledContactToCompleted } from '../api/api';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const UpdateScheduledContactToCompleted = () => {
+const UpdateContactToCompleted = () => {
     const { id } = useParams();
     const navigate = useNavigate ();
     const [data, setData] = useState({
@@ -26,7 +26,7 @@ const UpdateScheduledContactToCompleted = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-        //try {
+        try {
             const res = await updateScheduledContactToCompleted(id, data);
             if (res.status === 200 || res.status === 204) {
                 setSuccess(`Contact successfully updated with ID: ${id}`);
@@ -35,12 +35,15 @@ const UpdateScheduledContactToCompleted = () => {
             else if (res.status === 400){
                 setError('Set valid past dates and try again.');
             }
+            else if (res.status === 404){
+                setError(`Contact with ID ${id} does not exist.`);
+            }
             else {
                 setError('An unexpected error occurred. Please try again later.');
             }
-        //} //catch (error) {
-            //setError('An error occurred while updating the contact.');
-       // }
+        } catch (error) {
+            setError('An error occurred while updating the contact.');
+       }
     };
 
     return (
@@ -85,4 +88,4 @@ const UpdateScheduledContactToCompleted = () => {
     );
 };
 
-export default UpdateScheduledContactToCompleted;
+export default UpdateContactToCompleted;

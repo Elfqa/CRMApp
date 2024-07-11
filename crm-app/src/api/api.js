@@ -47,3 +47,16 @@ export const updateScheduledContactToCompleted = async (id, formData) => {
     // }
     return response;
 };
+export const editScheduledContact = async (id, formData) => {
+    const response = await fetch(`${url}/api/Contacts/edit-scheduled/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    // if (!response.ok) {
+    //     throw new Error('Failed to edit contact');
+    // }
+    return response;
+};
