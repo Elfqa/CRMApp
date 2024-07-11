@@ -1,7 +1,5 @@
 const url = 'https://localhost:7153'; //nasz url ktory mamy w swaggerze w apce backendowej
 
-/// /api/SearchContacts
-
 export const getContactsByAdvisorId = async (advisorId, setList) => {
     try {
         const response = await fetch(`${url}/api/Contacts/AdvisorId?id=${advisorId}`);
@@ -33,4 +31,19 @@ export const deleteContact = async (id) => {
     if (!response.ok) {
         throw new Error('Failed to delete contact');
     }
+};
+
+export const updateScheduledContactToCompleted = async (id, formData) => {
+    console.log(formData);
+    const response = await fetch(`${url}/api/Contacts/mark-as-completed/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    // if (!response.ok) {
+    //     throw new Error('Failed to update contact');
+    // }
+    return response;
 };

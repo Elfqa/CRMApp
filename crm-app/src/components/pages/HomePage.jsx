@@ -3,7 +3,7 @@ import Login from '../Login'; // Upewnij się, że ścieżka do Login jest popra
 const HomePage = () => {
     const handleLogin = () => {
         console.log("Login successful!");
-        // Możesz przekierować użytkownika lub wykonać inne akcje
+
     };
 
     return (
