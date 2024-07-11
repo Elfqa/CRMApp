@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { updateScheduledContactToCompleted } from '../api/api';
+import { updateContactToCompleted } from '../api/api';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateContactToCompleted = () => {
@@ -27,7 +27,7 @@ const UpdateContactToCompleted = () => {
         setError('');
         setSuccess('');
         try {
-            const res = await updateScheduledContactToCompleted(id, data);
+            const res = await updateContactToCompleted(id, data);
             if (res.status === 200 || res.status === 204) {
                 setSuccess(`Contact successfully updated with ID: ${id}`);
                 setTimeout(() => navigate('/my-contacts'), 3000); // Redirect to contacts after 3 seconds
