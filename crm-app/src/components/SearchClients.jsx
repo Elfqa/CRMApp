@@ -1,29 +1,32 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { getClientsByAdvisorId, getAllClients } from '../api/api.js';
+import {getClientById, getAllClients} from '../api/api.js';
 
 const SearchClients = ({ setList }) => {
-    const [advisorId, setAdvisorId] = useState("");
+    const [clientId, setClientId] = useState("");
     const [error, setError] = useState("");
 
-    const validateAdvisorId = (id) => {
+    const validateClientId = (id) => {
         const numberId = Number(id);
         return Number.isInteger(numberId) && numberId >= 1;
     };
 
-    const handleGetAllClientsByAdvisorId = async (e) => {
+    const handleGetClientById = async (e) => {
         e.preventDefault();
-        if (validateAdvisorId(advisorId)) {
+        if (validateClientId(clientId)) {
             setList([]); // Clear the list before fetching new data
+            setError(""); // Clear errors if validation is successful
             try {
-                await getClientsByAdvisorId(advisorId, setList);
-                setError(""); // Clear errors if validation is successful
+                const response = await getClientById(clientId, setList);
+                if (response && response.status === 404) {
+                    setError(`Client does not exist`); // Set error message
+                }
             } catch (error) {
                 console.log(error);
-                setError("Failed to fetch clients. Please try again.");
+                setError('Failed to fetch clients. Please try again.');
             }
         } else {
-            setError("Please enter a valid Advisor ID.");
+            setError('Please enter a valid Client ID.');
         }
     };
 
@@ -39,15 +42,15 @@ const SearchClients = ({ setList }) => {
 
     return (
         <div className="form-container">
-            <form onSubmit={handleGetAllClientsByAdvisorId}>
+            <form onSubmit={handleGetClientById}>
                 <div>
                     <label>
-                        Advisor ID
+                        Client ID
                         <input
                             type="text"
-                            value={advisorId}
-                            onChange={(e) => setAdvisorId(e.target.value)}
-                            placeholder="Enter Advisor ID"
+                            value={clientId}
+                            onChange={(e) => setClientId(e.target.value)}
+                            placeholder="Enter Client ID"
                         />
                     </label>
                     <button type="submit">Search</button>
