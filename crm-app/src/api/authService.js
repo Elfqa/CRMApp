@@ -23,6 +23,7 @@ export const login = async (username, password) => {
         }
 
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.user.id);
         return data.token;
     } catch (error) {
         console.error('Login error:', error);
@@ -36,4 +37,9 @@ export const getToken = () => {
 
 export const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+};
+
+export const getUserId = () => {
+    return localStorage.getItem('userId');
 };

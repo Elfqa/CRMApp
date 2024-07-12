@@ -26,7 +26,7 @@ const ContactsList = ({ contacts, setContacts }) => {
     }, [error, success]);
 
     return (
-        <div className="contacts-table-container">
+        <div className="table-container">
             <div className="contacts-table">
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 {success && <p style={{color: 'green'}}>{success}</p>}

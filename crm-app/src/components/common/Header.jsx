@@ -9,8 +9,9 @@ const Header = () => {
                 <ul className="header-menu">
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/my-contacts">My Contacts</Link></li>
+                    <li><Link to="/schedule-contact">Schedule Contact</Link></li>
                     <li><Link to="/my-clients">My Clients</Link></li>
-                    <li><Link to="/schedule-a-contact">Schedule a contact</Link></li>
+                    <li><Link to="/search-clients">Search Clients</Link></li>
                 </ul>
             </nav>
         </header>

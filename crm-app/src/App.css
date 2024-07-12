@@ -1,7 +1,7 @@
 .page{
   padding-left: 10px;
 }
-.contacts-table {
+.table-container {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
@@ -9,21 +9,21 @@
   text-align: left;
 }
 
-.contacts-table th,
-.contacts-table td {
+.table-container th,
+.table-container td {
   padding: 12px 15px;
   border: 1px solid #ddd;
 
 }
 
-.contacts-table th {
+.table-container th {
   background-color: darkgoldenrod;
   color: white;
 }
-.contacts-table tbody tr {
+.table-container tbody tr {
   background-color: #f9f9f9;
 }
-.contacts-table tbody tr:hover {
+.table-container tbody tr:hover {
   background-color: #f1f1f1;
 }
 

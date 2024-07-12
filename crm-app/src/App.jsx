@@ -11,6 +11,7 @@ import EditScheduledContact from "./components/EditScheduledContact.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
 import { getToken, logout } from './api/authService';
 import LogoutButton from './components/LogoutButton';
+import SearchClientsPage from "./components/pages/SearchClientsPage.jsx";
 
 
 function App() {
@@ -38,15 +39,16 @@ function App() {
                         <Route path='/' element={<HomePage />} />
                         <Route path='/my-contacts' element={<MyContacts />} />
                         <Route path='/my-clients' element={<MyClients />} />
-                        <Route path='/schedule-a-contact' element={<AddScheduledContactPage />} />
+                        <Route path='/schedule-contact' element={<AddScheduledContactPage />} />
                         <Route path="/update-contact/:id" element={<UpdateContactToCompleted />} />
                         <Route path="/edit-scheduled-contact/:id" element={<EditScheduledContact />} />
+                        <Route path="/search-clients" element={<SearchClientsPage />} />
                         <Route path='*' element={<Navigate to="/" />} /> {/* Redirect to home for any unknown routes */}
                     </Routes>
                 ) : (
                     <Routes>
                         <Route path='/login' element={<LoginPage onLogin={() => setIsAuthenticated(true)} />} />
-                        <Route path='*' element={<Navigate to="/login" />} /> {/* Redirect to login for any unknown routes */}
+                        <Route path='*' element={<Navigate to="/login" />} /> {/* Redirect to log in for any unknown routes */}
                     </Routes>
                 )}
             </div>

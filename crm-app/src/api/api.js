@@ -11,6 +11,7 @@ export const getContactsByAdvisorId = async (advisorId, setList) => {
             }
         });
         const data = await response.json();
+        //console.log(data);
         setList(data);
     } catch (error) {
         console.log(error);
@@ -72,4 +73,39 @@ export const editScheduledContact = async (id, formData) => {
     //     throw new Error('Failed to edit contact');
     // }
     return response;
+};
+
+
+//api/Clients
+export const getClientsByAdvisorId = async (advisorId, setList) => {
+    try {
+        const response = await fetch(`${url}/api/Clients/AdvisorId?id=${advisorId}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${tokenJWT}`
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        setList(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+export const getAllClients = async (setList) => {
+    try {
+        const response = await fetch(`${url}/api/Clients`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${tokenJWT}`
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        setList(data);
+    } catch (error) {
+        console.log('Error fetching all clients:', error);
+    }
 };
