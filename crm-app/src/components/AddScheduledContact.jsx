@@ -27,7 +27,7 @@ const AddScheduledContact = () => {
         try {
             const res = await addScheduledContact(data);
             if (res.status === 400) {
-                setError('Invalid input. Please enter a valid advisor ID, client ID and future date and try again.'); // Set error message
+                setError('Invalid input. Please enter a valid advisor ID, client ID, future date and try again.'); // Set error message
             } else if (res.status === 200) {
                 setSuccess(`Contact successfully scheduled with ID: ${res.id}`); // Set success message with ID
             } else {

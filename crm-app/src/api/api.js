@@ -1,25 +1,22 @@
-const url = 'https://localhost:7153'; //nasz url ktory mamy w swaggerze w apce backendowej
+import { getToken } from './authService';
+const tokenJWT = getToken();
+const url = 'https://localhost:7153';
 
-/// /api/SearchContacts
-
-
-// export const getContactsByAdvisorId = (advisorId, setList) => {
-//     fetch(`${url}/api/Contacts/AdvisorId?id=${advisorId}`)
-//         .then(res => res.json())
-//         .then(res => setList(res))
-//         .catch(err => console.log(err));
-// }
 export const getContactsByAdvisorId = async (advisorId, setList) => {
-    //try {
-        const response = await fetch(`${url}/api/Contacts/AdvisorId?id=${advisorId}`);
+    try {
+        const response = await fetch(`${url}/api/Contacts/AdvisorId?id=${advisorId}`,{
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${tokenJWT}`
+            }
+        });
         const data = await response.json();
+        //console.log(data);
         setList(data);
-    // } catch (error) {
-    //     console.log(error);
-    // }
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-
 
 export const addScheduledContact = async (formData) => {
     console.log(formData);
@@ -28,6 +25,7 @@ export const addScheduledContact = async (formData) => {
         body: JSON.stringify(formData),
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${tokenJWT}`
         }
     });
     const result = await response.json();       //To get new contact id passed by the API
@@ -35,19 +33,89 @@ export const addScheduledContact = async (formData) => {
     return { status: response.status, id: result };
 };
 
+export const deleteContact = async (id) => {
+    const response = await fetch(`${url}/api/Contacts/${id}`, {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${tokenJWT}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to delete contact');
+    }
+};
+
+export const updateContactToCompleted = async (id, formData) => {
+    console.log(formData);
+    const response = await fetch(`${url}/api/Contacts/mark-as-completed/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${tokenJWT}`
+        }
+    });
+    return response;
+};
+
+export const editScheduledContact = async (id, formData) => {
+    const response = await fetch(`${url}/api/Contacts/edit-scheduled/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json', //'Content-Type': 'application/json', only for methods with body: put, post
+            'Authorization': `Bearer ${tokenJWT}`
+        }
+    });
+    return response;
+};
 
 
+//api/Clients
+export const getClientsByAdvisorId = async (advisorId, setList) => {
+    try {
+        const response = await fetch(`${url}/api/Clients/AdvisorId?id=${advisorId}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${tokenJWT}`
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        setList(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const getClientById = async (clientId, setList) => {
+    try {
+        const response = await fetch(`${url}/api/Clients/${clientId}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${tokenJWT}`
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        setList([data]);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-// export async function getContacts(url) {
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         return data;
-//     } catch (error) {
-//         console.error('Failed to fetch contacts:', error);
-//         return [];
-//     }
-// }
+export const getAllClients = async (setList) => {
+    try {
+        const response = await fetch(`${url}/api/Clients`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${tokenJWT}`
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        setList(data);
+    } catch (error) {
+        console.log(error);
+    }
+};

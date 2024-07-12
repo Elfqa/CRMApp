@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { deleteContact } from "../api/api";
+import { Link } from 'react-router-dom';
 
 const statusMapping = {
     0: 'Scheduled',
@@ -27,32 +29,50 @@ const Contact = ({
                      status,
                      advisorId,
                      clientId,
+                     setContacts,
+                     setError,
+                     setSuccess
                  }) => {
-    const contactCardStyle = {
-        border: '1px solid black',
-        padding: '10px',
-        borderRadius: '5px',
-        textAlign: 'left',
+    const rowStyle = {
         backgroundColor: getBackgroundColor(status)
     };
 
+    const handleDelete = async () => {
+        setError('');
+        setSuccess('');
+        try {
+            await deleteContact(id);
+            setContacts(prev => prev.filter(contact => contact.id !== id));{/* to filter contact list without deleted contact id */}
+            setSuccess(`Successfully deleted contact with ID: ${id}`);
+        } catch (error) {
+            setError('Failed to delete contact. Please try again.');
+        }
+    };
+
     return (
-        <div className="contact-card" style={contactCardStyle}>
-            <h2>Contact ID: {id}</h2>
-            <p><strong>Advisor ID:</strong> {advisorId} <strong>Client ID:</strong> {clientId}</p>
-            <p><strong>Description:</strong> {description}</p>
-            <p><strong>Status:</strong> {statusMapping[status]}</p>
-            {status === 0 && (
-                <p><strong>Scheduled Date:</strong> {scheduledDate ? new Date(scheduledDate).toLocaleString() : 'N/A'}</p>
-            )}
-            {status === 1 && (
-                <>
-                    <p><strong>Start Date:</strong> {startDate ? new Date(startDate).toLocaleString() : 'N/A'} <strong>End Date:</strong> {endDate ? new Date(endDate).toLocaleString() : 'N/A'}</p>
-                </>
-            )}
-            <p><strong>Creation Date:</strong> {new Date(creationDate).toLocaleString()}</p>
-            <p><strong>Last Update:</strong> {new Date(lastUpdate).toLocaleString()}</p>
-        </div>
+        <tr style={rowStyle}>
+            <td>{id}</td>
+            <td>{advisorId}</td>
+            <td>{clientId}</td>
+            <td>{description}</td>
+            <td>{statusMapping[status]}</td>
+            <td>
+                {status === 0 ? (
+                    scheduledDate ? new Date(scheduledDate).toLocaleString() : 'N/A'
+                ) : (
+                    <>
+                        {startDate ? new Date(startDate).toLocaleString() : 'N/A'} - {endDate ? new Date(endDate).toLocaleString() : 'N/A'}
+                    </>
+                )}
+            </td>
+            <td>{new Date(creationDate).toLocaleString()}</td>
+            <td>{new Date(lastUpdate).toLocaleString()}</td>
+            <td>
+                <button onClick={handleDelete}>Delete </button>
+                {status === 0 &&  <Link to={`/edit-scheduled-contact/${id}`}><button>Reschedule</button></Link>}{/* conditional rendering: edit button is only available for scheduled contacts */}
+                <Link to={`/update-contact/${id}`}><button>Update</button></Link>
+            </td>
+        </tr>
     );
 };
 
@@ -67,6 +87,9 @@ Contact.propTypes = {
     status: PropTypes.number.isRequired,
     advisorId: PropTypes.number.isRequired,
     clientId: PropTypes.number.isRequired,
+    setContacts: PropTypes.func.isRequired,
+    setError: PropTypes.func.isRequired,
+    setSuccess: PropTypes.func.isRequired,
 };
 
 export default Contact;
